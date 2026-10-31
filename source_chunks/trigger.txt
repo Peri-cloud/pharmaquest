@@ -1,1 +1,0 @@
-Trigger complete PharmaQuest source reconstruction and GitHub Pages deployment.
