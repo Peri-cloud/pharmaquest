@@ -2,12 +2,11 @@ name: Deploy PharmaQuest to GitHub Pages
 
 on:
   push:
-    paths:
-      - 'source_chunks/trigger.txt'
+    branches: [main]
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
 
@@ -24,36 +23,12 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Rebuild complete app from source archive chunks
-        shell: bash
-        run: |
-          set -euo pipefail
-          test -d source_chunks
-          cat source_chunks/part-*.b64 | base64 --decode > /tmp/PharmaQuest-Source.zip
-          mkdir -p /tmp/pharmaquest-unpack
-          unzip -q /tmp/PharmaQuest-Source.zip -d /tmp/pharmaquest-unpack
-          test -f /tmp/pharmaquest-unpack/PharmaQuest/index.html
-          test -f /tmp/pharmaquest-unpack/PharmaQuest/app.js
-          test -f /tmp/pharmaquest-unpack/PharmaQuest/data/manifest.json
-          rsync -a --delete --exclude='.git/' --exclude='.github/' /tmp/pharmaquest-unpack/PharmaQuest/ ./
-          rm -rf source_chunks
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A
-          git commit -m "Publish complete PharmaQuest app and question bank"
-          git push origin HEAD:main
-
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
-
       - name: Upload static site
         uses: actions/upload-pages-artifact@v3
         with:
           path: .
-
       - name: Deploy site
         id: deployment
         uses: actions/deploy-pages@v4
