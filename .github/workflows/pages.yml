@@ -1,6 +1,9 @@
 name: Deploy PharmaQuest to GitHub Pages
 
 on:
+  push:
+    paths:
+      - 'source_chunks/trigger.txt'
   workflow_dispatch:
 
 permissions:
