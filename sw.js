@@ -1,5 +1,5 @@
 /* Small offline-first shell cache. Subject files are cached as the user opens them. */
-const CACHE_NAME = 'pharmaquest-20261031-fix2';
+const CACHE_NAME = 'pharmaquest-20261031-fix3';
 const SHELL = [
   './', './index.html', './styles.css', './app.js', './manifest.webmanifest',
   './data/manifest.json', './assets/favicon.svg'
