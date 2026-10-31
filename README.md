@@ -1,31 +1,29 @@
 # PharmaQuest — Pharmacist Exam Lab
 
-A static, responsive MCQ practice app for pharmacy exam preparation. It includes a daily mixed-practice target, subject- and topic-wise practice, timed mock tests, instant explanations, bookmarks, wrong-answer revision, performance analytics, local progress backup, themes and an offline-capable PWA shell.
+<badge>Repository initialized</badge>
 
-## Question bank
+This repository has been created for the standalone PharmaQuest pharmacist MCQ practice application. The initial GitHub setup is in place, including the `main` branch, this deployment workflow and a Windows publishing helper.
 
-- Source archive: 45,915 MCQ records across 21 pharmacy subjects.
-- Default scored pool: 45,080 answerable records after excluding invalid-answer records and source-flagged quality issues.
-- Original questions and explanations are preserved as supplied and have not been independently fact-checked. Verify clinical, legal, dose-related and current-regulation facts against authoritative references.
+**Important:** the full app source and question-bank JSON files have not yet been transferred into this repository. The repo will become the complete runnable app after the first full project push.
 
-## Run locally
+## Project package
 
-With Python 3 installed, run `python -m http.server 8000` from the project root and open http://localhost:8000. Do not open index.html directly with file:// because browser data requests may be blocked.
+The complete source package is provided separately in the ChatGPT conversation as **PharmaQuest-GitHub-Pages.zip**. It contains the app, its 21 pharmacy-subject datasets, documentation and the Windows publishing helper.
 
-## GitHub Pages deployment
+## Publish the complete project
 
-The repository includes `.github/workflows/pages.yml`. In GitHub, open **Settings → Pages** and select **GitHub Actions** as the build and deployment source. Push the project to `main`; the workflow will publish the static site. Check the **Actions** tab for the deployment result and **Settings → Pages** for the live URL.
+1. Download and extract `PharmaQuest-GitHub-Pages.zip`.
+2. Open the extracted `PharmaQuest` folder — the one that contains `index.html`.
+3. Make sure Git for Windows is installed and GitHub sign-in works in Git Credential Manager.
+4. Double-click `PUSH-TO-GITHUB.bat`.
+5. The helper fetches this repository's current `main` branch, preserves the extracted project files, commits them and pushes the full app to this repository.
 
-## Data and privacy
+Run the helper from the extracted app folder, **not from a clone of this temporary bootstrap repository**.
 
-Progress, bookmarks, streaks and preferences are stored in localStorage in the current browser profile. They are not sent to a server. Export a progress backup before clearing site data or changing devices. For offline use, open each subject while online once so its dataset can be cached.
+## GitHub Pages
 
-## Project structure
+The repository includes `.github/workflows/pages.yml`. After the full app files are pushed, open **Settings → Pages → Build and deployment → Source** and select **GitHub Actions**. The next app-source push will run the deployment workflow. Check the **Actions** tab for its result and **Settings → Pages** for the published URL.
 
-- `index.html`, `styles.css`, `app.js`: app interface and session logic
-- `data/manifest.json`: subject catalogue
-- `data/subjects/*.json`: 21 normalized subject datasets
-- `sw.js`, `manifest.webmanifest`: offline/PWA support
-- `.github/workflows/pages.yml`: automatic Pages deployment
-- `MASTER_PROMPT.md`: future development prompt
-- `DATA_AUDIT.md`: source-data quality summary
+## Question-bank notes
+
+The source archive contains 45,915 MCQ records across 21 pharmacy subjects. The default practice pool includes 45,080 answerable records after excluding invalid-answer records and source-flagged quality issues. The supplied questions and explanations have not been independently fact-checked; verify important clinical, legal, dosage and current-regulation facts against authoritative references.
