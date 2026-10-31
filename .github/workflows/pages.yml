@@ -3,17 +3,10 @@ name: Deploy PharmaQuest to GitHub Pages
 on:
   push:
     branches: [main]
-    paths:
-      - 'index.html'
-      - 'app.js'
-      - 'styles.css'
-      - 'data/**'
-      - 'sw.js'
-      - 'manifest.webmanifest'
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -30,12 +23,42 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Expand uploaded PharmaQuest source bundle
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -f "PharmaQuest-Source.zip" ]; then
+            echo "Found PharmaQuest-Source.zip; expanding the project."
+            mkdir -p /tmp/pharmaquest-unpack
+            unzip -q "PharmaQuest-Source.zip" -d /tmp/pharmaquest-unpack
+            test -f "/tmp/pharmaquest-unpack/PharmaQuest/index.html"
+            test -f "/tmp/pharmaquest-unpack/PharmaQuest/app.js"
+            test -f "/tmp/pharmaquest-unpack/PharmaQuest/styles.css"
+            rsync -a --exclude='.github/' "/tmp/pharmaquest-unpack/PharmaQuest/" "./"
+            rm -f "PharmaQuest-Source.zip"
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add -A
+            if ! git diff --cached --quiet; then
+              git commit -m "Add PharmaQuest app and 21 pharmacy subject datasets"
+              git push origin HEAD:main
+            fi
+            echo "The application source is now expanded into the repository."
+          else
+            echo "No source ZIP found; deploying the current repository contents."
+          fi
+
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
+
       - name: Upload static site
         uses: actions/upload-pages-artifact@v3
         with:
           path: .
+
       - name: Deploy site
         id: deployment
         uses: actions/deploy-pages@v4
