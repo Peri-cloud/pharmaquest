@@ -3,6 +3,13 @@ name: Deploy PharmaQuest to GitHub Pages
 on:
   push:
     branches: [main]
+    paths:
+      - 'index.html'
+      - 'app.js'
+      - 'styles.css'
+      - 'data/**'
+      - 'sw.js'
+      - 'manifest.webmanifest'
   workflow_dispatch:
 
 permissions:
