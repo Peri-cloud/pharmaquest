@@ -92,7 +92,7 @@
     if(!await ensureAll())return;
     const pool=balancedMix(count);makeSession(pool,{mode,title:mode==='exam'?'Timed mock test':'Mixed practice',minutes});
   }
-  async function startSubject(slug,{topic=null,count=20,mode='practice',minutes=0}={}){
+  async function startSubject(slug,{topic=null,count=100,mode='practice',minutes=0}={}){
     const subject=getManifestSubject(slug);if(!subject)return;
     try{busy(true,`Loading ${subject.name}`,`Preparing questions${topic?` for ${topic}`:''}…`);const rows=await loadSubject(subject);busy(false);const pool=filteredQuestions(rows).filter(q=>!topic||q.topic===topic);makeSession(shuffle(pool).slice(0,count),{mode,title:topic?`${subject.name} · ${topic}`:subject.name,minutes});}
     catch(e){busy(false);toast(e.message);}
@@ -190,7 +190,7 @@
   function renderPractice(){
     const s=appState.session;if(!s)return `<div class="empty-state"><div class="empty-icon">📚</div><h3>No active session</h3><p>Choose a daily practice set or select a subject to begin.</p><button class="btn btn-primary" data-action="nav" data-page="dashboard">Back to dashboard</button></div>`;
     const i=s.index,q=s.items[i],selected=s.picks[i],checked=s.mode==='practice'&&!!s.checked[i],bookmarked=store.bookmarks.includes(q.id),pctDone=pct(i+1,s.items.length);
-    const options=q.options.map((opt,n)=>{let cls='';if(Number.isInteger(selected)&&selected===n)cls+=' selected';if(checked&&n===q.answer)cls+=' correct';if(checked&&n===selected&&selected!==q.answer)cls+=' wrong';return `<button class="option${cls}" data-action="choose-option" data-index="${n}" ${checked?'disabled':''}><span class="option-letter">${LETTERS[n]||n+1}</span><span class="option-text">${esc(opt)}</span></button>`;}).join('');
+    const options=q.options.map((opt,n)=>{let cls='';if(Number.isInteger(selected)&&selected===n)cls+=' selected';if(checked&&n===q.answer)cls+=' correct';if(checked&&n===selected&&selected!==q.answer)cls+=' wrong';return `<button type="button" class="option${cls}" aria-pressed="${selected===n}" data-action="choose-option" data-index="${n}" ${checked?'disabled':''}><span class="option-letter">${LETTERS[n]||n+1}</span><span class="option-text">${esc(opt)}</span></button>`;}).join('');
     const feedback=checked?`<div class="answer-feedback ${selected===q.answer?'good':'bad'}"><div class="feedback-title">${selected===q.answer?'✓ Correct!':'✕ Incorrect. Correct answer: '+(LETTERS[q.answer]||q.answer+1)+' — '+esc(q.options[q.answer])+'.'}</div><div class="feedback-explanation">${esc(q.explanation||'No explanation was supplied for this question.')}</div></div>`:'';
     const actions=s.mode==='exam'?`<div class="question-actions-left"><button class="bookmark-btn ${s.reviewLater[i]?'active':''}" data-action="mark-review">⚑ ${s.reviewLater[i]?'Marked for review':'Mark for review'}</button></div><div class="question-actions-right">${i>0?`<button class="btn btn-light" data-action="previous">← Previous</button>`:''}<button class="btn btn-dark" data-action="next">${i===s.items.length-1?'Finish test':'Next question →'}</button></div>`:
       `<div class="question-actions-left"><button class="bookmark-btn ${bookmarked?'active':''}" data-action="bookmark">${bookmarked?'★ Saved':'☆ Bookmark'}</button><button class="bookmark-btn" data-action="skip">Skip</button></div><div class="question-actions-right">${checked?`<button class="btn btn-dark" data-action="next">${i===s.items.length-1?'Finish session':'Next question →'}</button>`:`<button class="btn btn-dark" data-action="submit" ${Number.isInteger(selected)?'':'disabled'}>Check answer</button>`}</div>`;
@@ -339,7 +339,7 @@
     try{
       const res=await fetch('./data/manifest.json');if(!res.ok)throw new Error('The subject manifest could not be found.');appState.manifest=await res.json();
       document.title='PharmaQuest — Pharmacist Exam Lab';
-      $('#app').addEventListener('click',eventClick);$('#app').addEventListener('input',onInput);$('#app').addEventListener('change',onChange);document.addEventListener('keydown',onKey);
+      document.addEventListener('click',eventClick,true);$('#app').addEventListener('input',onInput);$('#app').addEventListener('change',onChange);document.addEventListener('keydown',onKey);
       if('serviceWorker' in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
       appState.page='dashboard';render();
     }catch(e){bootError(e);}
