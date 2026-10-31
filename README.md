@@ -1,29 +1,35 @@
 # PharmaQuest — Pharmacist Exam Lab
 
-<badge>Repository initialized</badge>
+This repository is being prepared for the standalone PharmaQuest pharmacy MCQ practice app.
 
-This repository has been created for the standalone PharmaQuest pharmacist MCQ practice application. The initial GitHub setup is in place, including the `main` branch, this deployment workflow and a Windows publishing helper.
+## First upload — no Git installation needed
 
-**Important:** the full app source and question-bank JSON files have not yet been transferred into this repository. The repo will become the complete runnable app after the first full project push.
+The complete project is uploaded as one ZIP file. The repository's GitHub Actions workflow expands it, commits the actual app files and all 21 pharmacy subject datasets, then deploys the site.
 
-## Project package
+1. Open this repository: https://github.com/Peri-cloud/pharmaquest
+2. Click **Add file → Upload files**.
+3. Upload **PharmaQuest-Source.zip** to the repository root. Do not extract it before uploading.
+4. Commit the ZIP upload to the **main** branch.
+5. Open **Actions** and watch **Deploy PharmaQuest to GitHub Pages**.
+6. Once deployment succeeds, open **Settings → Pages** for the live site URL.
 
-The complete source package is provided separately in the ChatGPT conversation as **PharmaQuest-GitHub-Pages.zip**. It contains the app, its 21 pharmacy-subject datasets, documentation and the Windows publishing helper.
+**Do not run a batch file.** This upload method works through the GitHub website and does not require Git for Windows.
 
-## Publish the complete project
+## What the application includes
 
-1. Download and extract `PharmaQuest-GitHub-Pages.zip`.
-2. Open the extracted `PharmaQuest` folder — the one that contains `index.html`.
-3. Make sure Git for Windows is installed and GitHub sign-in works in Git Credential Manager.
-4. Double-click `PUSH-TO-GITHUB.bat`.
-5. The helper fetches this repository's current `main` branch, preserves the extracted project files, commits them and pushes the full app to this repository.
+- 45,915 source MCQ records across 21 pharmacy subjects.
+- 45,080 default-eligible, answerable questions after excluding invalid-answer records and source-flagged quality issues.
+- Daily mixed practice, subject/topic practice and customizable timed mock tests.
+- Instant explanations in practice mode, bookmarks and wrong-answer revision.
+- Session summaries, analytics, streaks and adjustable daily target.
+- Local progress backup/restore, light/dark theme and offline-capable PWA shell.
 
-Run the helper from the extracted app folder, **not from a clone of this temporary bootstrap repository**.
+The supplied questions and explanations have not been independently fact-checked. Check important clinical, legal, dosage and current-regulation facts against authoritative references.
 
-## GitHub Pages
+## After first deployment
 
-The repository includes `.github/workflows/pages.yml`. After the full app files are pushed, open **Settings → Pages → Build and deployment → Source** and select **GitHub Actions**. The next app-source push will run the deployment workflow. Check the **Actions** tab for its result and **Settings → Pages** for the published URL.
+The app files will appear directly in the repository root: `index.html`, `app.js`, `styles.css`, `data/` and PWA files. Future pushes to `main` trigger the deployment workflow automatically.
 
-## Question-bank notes
+Progress and bookmarks are stored locally in the browser; they are not synced between devices. Export a backup before clearing browser data.
 
-The source archive contains 45,915 MCQ records across 21 pharmacy subjects. The default practice pool includes 45,080 answerable records after excluding invalid-answer records and source-flagged quality issues. The supplied questions and explanations have not been independently fact-checked; verify important clinical, legal, dosage and current-regulation facts against authoritative references.
+Published GitHub Pages sites are public. Do not store personal records, private notes or secrets in this repository.
