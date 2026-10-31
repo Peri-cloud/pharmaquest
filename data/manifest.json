@@ -1,0 +1,414 @@
+{
+  "app": "PharmaQuest",
+  "generated": "2026-10-31 07:27",
+  "dataVersion": "202610310727",
+  "sourceTotal": 45915,
+  "answerable": 45892,
+  "readyDefault": 45080,
+  "subjects": [
+    {
+      "name": "Pharmacology",
+      "slug": "pharmacology",
+      "path": "data/subjects/pharmacology.json",
+      "count": 11175,
+      "answered": 11174,
+      "highYield": 2973,
+      "topTopics": [
+        "Chemotherapy",
+        "General pharmacology",
+        "CNS drugs",
+        "Cardiovascular drugs",
+        "Endocrine drugs",
+        "ANS drugs",
+        "GIT drugs",
+        "Autacoids",
+        "Vitamins & haematinics",
+        "Respiratory drugs",
+        "Blood & coagulation",
+        "Immunomodulators"
+      ],
+      "answerable": 11174,
+      "ready": 11037,
+      "flagged": 214,
+      "topicCount": 15
+    },
+    {
+      "name": "Pharmaceutics",
+      "slug": "pharmaceutics",
+      "path": "data/subjects/pharmaceutics.json",
+      "count": 6948,
+      "answered": 6946,
+      "highYield": 2089,
+      "topTopics": [
+        "Tablets & coating",
+        "Liquids & mixtures",
+        "Semisolids",
+        "Sterile products",
+        "Unit operations",
+        "Packaging & stability",
+        "Novel drug delivery",
+        "Dispensing & posology",
+        "Surgical products & sterilisation (pharm)"
+      ],
+      "answerable": 6945,
+      "ready": 6808,
+      "flagged": 170,
+      "topicCount": 10
+    },
+    {
+      "name": "Pharmacognosy",
+      "slug": "pharmacognosy",
+      "path": "data/subjects/pharmacognosy.json",
+      "count": 4319,
+      "answered": 4319,
+      "highYield": 952,
+      "topTopics": [
+        "Alkaloids",
+        "Traditional medicine",
+        "Glycosides",
+        "Plant families & morphology",
+        "Volatile oils",
+        "Tannins & resins",
+        "Carbohydrates & lipids (plants)",
+        "Crude drug evaluation",
+        "Marine & other",
+        "Plant extraction"
+      ],
+      "answerable": 4319,
+      "ready": 4271,
+      "flagged": 55,
+      "topicCount": 11
+    },
+    {
+      "name": "Anatomy & Physiology",
+      "slug": "anatomy_physiology",
+      "path": "data/subjects/anatomy_physiology.json",
+      "count": 3355,
+      "answered": 3353,
+      "highYield": 682,
+      "topTopics": [
+        "Cardiovascular system",
+        "Musculoskeletal",
+        "Blood & body fluids",
+        "Nervous system",
+        "Digestive system",
+        "Endocrine & reproduction",
+        "Renal system",
+        "Respiratory system",
+        "Special senses & skin",
+        "Cell & tissue"
+      ],
+      "answerable": 3353,
+      "ready": 3320,
+      "flagged": 48,
+      "topicCount": 11
+    },
+    {
+      "name": "Biochemistry",
+      "slug": "biochemistry",
+      "path": "data/subjects/biochemistry.json",
+      "count": 3177,
+      "answered": 3177,
+      "highYield": 830,
+      "topTopics": [
+        "Proteins & amino acids",
+        "Enzymes",
+        "Nucleic acids",
+        "Vitamins & minerals",
+        "Carbohydrate metabolism",
+        "Lipids",
+        "Biological oxidation",
+        "Water & electrolyte balance"
+      ],
+      "answerable": 3177,
+      "ready": 3132,
+      "flagged": 56,
+      "topicCount": 9
+    },
+    {
+      "name": "Physical Pharmacy",
+      "slug": "physical_pharmacy",
+      "path": "data/subjects/physical_pharmacy.json",
+      "count": 2065,
+      "answered": 2065,
+      "highYield": 566,
+      "topTopics": [
+        "Rheology",
+        "Micromeritics",
+        "Solubility & ionisation",
+        "Surface & interfacial",
+        "Phase equilibria & tonicity",
+        "Colloids & EM"
+      ],
+      "answerable": 2065,
+      "ready": 2023,
+      "flagged": 47,
+      "topicCount": 7
+    },
+    {
+      "name": "Pharmaceutical Analysis",
+      "slug": "pharmaceutical_analysis",
+      "path": "data/subjects/pharmaceutical_analysis.json",
+      "count": 1998,
+      "answered": 1998,
+      "highYield": 455,
+      "topTopics": [
+        "Chromatography",
+        "Titrimetry",
+        "Spectroscopy",
+        "Electrochemical",
+        "Misc methods"
+      ],
+      "answerable": 1998,
+      "ready": 1972,
+      "flagged": 29,
+      "topicCount": 6
+    },
+    {
+      "name": "Pharmaceutical Microbiology",
+      "slug": "pharmaceutical_microbiology",
+      "path": "data/subjects/pharmaceutical_microbiology.json",
+      "count": 1878,
+      "answered": 1878,
+      "highYield": 546,
+      "topTopics": [
+        "Sterilisation",
+        "Staining & morphology",
+        "Antimicrobials & disinfection",
+        "Microbial products & pyrogens",
+        "Immunology",
+        "Culture & growth"
+      ],
+      "answerable": 1878,
+      "ready": 1839,
+      "flagged": 53,
+      "topicCount": 7
+    },
+    {
+      "name": "Pharmaceutical Chemistry (Inorganic/Organic)",
+      "slug": "pharmaceutical_chemistry_inorganic_organic",
+      "path": "data/subjects/pharmaceutical_chemistry_inorganic_organic.json",
+      "count": 1658,
+      "answered": 1657,
+      "highYield": 355,
+      "topTopics": [
+        "Organic reactions & mechanisms",
+        "Isomerism & stereochemistry",
+        "Inorganic pharmaceuticals",
+        "Heterocyclic chemistry",
+        "Functional groups"
+      ],
+      "answerable": 1657,
+      "ready": 1615,
+      "flagged": 44,
+      "topicCount": 6
+    },
+    {
+      "name": "Pharmaceutical Jurisprudence",
+      "slug": "pharmaceutical_jurisprudence",
+      "path": "data/subjects/pharmaceutical_jurisprudence.json",
+      "count": 1635,
+      "answered": 1634,
+      "highYield": 454,
+      "topTopics": [
+        "Schedules & forms",
+        "Acts & Rules",
+        "Offences & labelling"
+      ],
+      "answerable": 1634,
+      "ready": 1542,
+      "flagged": 100,
+      "topicCount": 4
+    },
+    {
+      "name": "Pharmaceutical Technology / Regulatory (GMP, QA)",
+      "slug": "pharmaceutical_technology_regulatory_gmp_qa",
+      "path": "data/subjects/pharmaceutical_technology_regulatory_gmp_qa.json",
+      "count": 1509,
+      "answered": 1509,
+      "highYield": 441,
+      "topTopics": [
+        "GMP & quality",
+        "Clinical trials",
+        "Regulatory filings"
+      ],
+      "answerable": 1509,
+      "ready": 1466,
+      "flagged": 43,
+      "topicCount": 4
+    },
+    {
+      "name": "Other",
+      "slug": "other",
+      "path": "data/subjects/other.json",
+      "count": 1299,
+      "answered": 1285,
+      "highYield": 204,
+      "topTopics": [
+        "Biostatistics"
+      ],
+      "answerable": 1285,
+      "ready": 1247,
+      "flagged": 54,
+      "topicCount": 2
+    },
+    {
+      "name": "Biopharmaceutics & Pharmacokinetics",
+      "slug": "biopharmaceutics_pharmacokinetics",
+      "path": "data/subjects/biopharmaceutics_pharmacokinetics.json",
+      "count": 1243,
+      "answered": 1243,
+      "highYield": 363,
+      "topTopics": [
+        "Absorption",
+        "Kinetics & models",
+        "Distribution",
+        "Metabolism & excretion"
+      ],
+      "answerable": 1243,
+      "ready": 1216,
+      "flagged": 30,
+      "topicCount": 5
+    },
+    {
+      "name": "Medicinal Chemistry",
+      "slug": "medicinal_chemistry",
+      "path": "data/subjects/medicinal_chemistry.json",
+      "count": 849,
+      "answered": 849,
+      "highYield": 195,
+      "topTopics": [
+        "SAR & drug design",
+        "Prodrugs & drug targeting",
+        "Drug synthesis"
+      ],
+      "answerable": 849,
+      "ready": 835,
+      "flagged": 17,
+      "topicCount": 4
+    },
+    {
+      "name": "Toxicology",
+      "slug": "toxicology",
+      "path": "data/subjects/toxicology.json",
+      "count": 513,
+      "answered": 513,
+      "highYield": 103,
+      "topTopics": [
+        "Poisoning & antidotes"
+      ],
+      "answerable": 513,
+      "ready": 504,
+      "flagged": 13,
+      "topicCount": 2
+    },
+    {
+      "name": "Drug Store & Business Management",
+      "slug": "drug_store_business_management",
+      "path": "data/subjects/drug_store_business_management.json",
+      "count": 501,
+      "answered": 500,
+      "highYield": 107,
+      "topTopics": [
+        "Inventory & store",
+        "Business & accounts"
+      ],
+      "answerable": 500,
+      "ready": 493,
+      "flagged": 8,
+      "topicCount": 3
+    },
+    {
+      "name": "Pathophysiology",
+      "slug": "pathophysiology",
+      "path": "data/subjects/pathophysiology.json",
+      "count": 429,
+      "answered": 429,
+      "highYield": 89,
+      "topTopics": [
+        "Disease mechanisms",
+        "Cell injury & inflammation"
+      ],
+      "answerable": 429,
+      "ready": 423,
+      "flagged": 7,
+      "topicCount": 3
+    },
+    {
+      "name": "Hospital & Clinical Pharmacy",
+      "slug": "hospital_clinical_pharmacy",
+      "path": "data/subjects/hospital_clinical_pharmacy.json",
+      "count": 381,
+      "answered": 381,
+      "highYield": 86,
+      "topTopics": [
+        "Clinical services",
+        "Hospital pharmacy"
+      ],
+      "answerable": 381,
+      "ready": 374,
+      "flagged": 8,
+      "topicCount": 3
+    },
+    {
+      "name": "Community Pharmacy / Public Health",
+      "slug": "community_pharmacy_public_health",
+      "path": "data/subjects/community_pharmacy_public_health.json",
+      "count": 349,
+      "answered": 349,
+      "highYield": 52,
+      "topTopics": [
+        "Health programmes",
+        "Disease control & sanitation"
+      ],
+      "answerable": 349,
+      "ready": 343,
+      "flagged": 6,
+      "topicCount": 3
+    },
+    {
+      "name": "Pharmacy Practice",
+      "slug": "pharmacy_practice",
+      "path": "data/subjects/pharmacy_practice.json",
+      "count": 333,
+      "answered": 333,
+      "highYield": 83,
+      "topTopics": [
+        "Community pharmacy practice",
+        "Ethics & standards"
+      ],
+      "answerable": 333,
+      "ready": 327,
+      "flagged": 7,
+      "topicCount": 3
+    },
+    {
+      "name": "Biotechnology",
+      "slug": "biotechnology",
+      "path": "data/subjects/biotechnology.json",
+      "count": 301,
+      "answered": 301,
+      "highYield": 54,
+      "topTopics": [
+        "rDNA & genetic engineering",
+        "Antibody & cell culture"
+      ],
+      "answerable": 301,
+      "ready": 293,
+      "flagged": 8,
+      "topicCount": 3
+    }
+  ],
+  "filterPolicy": {
+    "description": "Default practice hides records with source flags that indicate missing images, incomplete stems, duplicate options, conflicting/low-confidence answers or a need for human review. Questions without a valid answer index are never scored.",
+    "excludedFlags": [
+      "answer_conflicts_poll",
+      "answer_low_confidence",
+      "duplicate_options",
+      "image_needed",
+      "incomplete_question",
+      "needs_human_answer"
+    ],
+    "includedFlag": "answer_agrees_poll"
+  }
+}
