@@ -191,7 +191,7 @@
     const s=appState.session;if(!s)return `<div class="empty-state"><div class="empty-icon">📚</div><h3>No active session</h3><p>Choose a daily practice set or select a subject to begin.</p><button class="btn btn-primary" data-action="nav" data-page="dashboard">Back to dashboard</button></div>`;
     const i=s.index,q=s.items[i],selected=s.picks[i],checked=s.mode==='practice'&&!!s.checked[i],bookmarked=store.bookmarks.includes(q.id),pctDone=pct(i+1,s.items.length);
     const options=q.options.map((opt,n)=>{let cls='';if(Number.isInteger(selected)&&selected===n)cls+=' selected';if(checked&&n===q.answer)cls+=' correct';if(checked&&n===selected&&selected!==q.answer)cls+=' wrong';return `<button class="option${cls}" data-action="choose-option" data-index="${n}" ${checked?'disabled':''}><span class="option-letter">${LETTERS[n]||n+1}</span><span class="option-text">${esc(opt)}</span></button>`;}).join('');
-    const feedback=checked?`<div class="answer-feedback ${selected===q.answer?'good':'bad'}"><div class="feedback-title">${selected===q.answer?'✓ Correct answer':'✕ Not quite — the correct answer is '+(LETTERS[q.answer]||q.answer+1)+'.'}</div><div class="feedback-explanation">${esc(q.explanation||'No explanation was supplied for this question.')}</div></div>`:'';
+    const feedback=checked?`<div class="answer-feedback ${selected===q.answer?'good':'bad'}"><div class="feedback-title">${selected===q.answer?'✓ Correct!':'✕ Incorrect. Correct answer: '+(LETTERS[q.answer]||q.answer+1)+' — '+esc(q.options[q.answer])+'.'}</div><div class="feedback-explanation">${esc(q.explanation||'No explanation was supplied for this question.')}</div></div>`:'';
     const actions=s.mode==='exam'?`<div class="question-actions-left"><button class="bookmark-btn ${s.reviewLater[i]?'active':''}" data-action="mark-review">⚑ ${s.reviewLater[i]?'Marked for review':'Mark for review'}</button></div><div class="question-actions-right">${i>0?`<button class="btn btn-light" data-action="previous">← Previous</button>`:''}<button class="btn btn-dark" data-action="next">${i===s.items.length-1?'Finish test':'Next question →'}</button></div>`:
       `<div class="question-actions-left"><button class="bookmark-btn ${bookmarked?'active':''}" data-action="bookmark">${bookmarked?'★ Saved':'☆ Bookmark'}</button><button class="bookmark-btn" data-action="skip">Skip</button></div><div class="question-actions-right">${checked?`<button class="btn btn-dark" data-action="next">${i===s.items.length-1?'Finish session':'Next question →'}</button>`:`<button class="btn btn-dark" data-action="submit" ${Number.isInteger(selected)?'':'disabled'}>Check answer</button>`}</div>`;
     const modeTitle=s.mode==='exam'?'Timed mock test':'Practice mode';
@@ -262,7 +262,7 @@
     if(a==='theme'||a==='toggle-theme'){store.theme=store.theme==='dark'?'light':'dark';persist();setTheme();render();return;}
     if(a==='daily'){startDaily();return;}
     if(a==='quick-mix'){startAllRandom(10);return;}
-    if(a==='subject-start'){startSubject(el.dataset.slug);return;}
+    if(a==='subject-start'){openSubjectPicker(el.dataset.slug);return;}
     if(a==='subject-topics'){openTopicPicker(el.dataset.slug);return;}
     if(a==='topic-start'){startSubject(el.dataset.slug,{topic:el.dataset.topic});return;}
     if(a==='mock'){openMockBuilder();return;}
@@ -286,14 +286,35 @@
     if(a==='reset'){if(confirm('Delete all PharmaQuest progress, bookmarks and preferences stored in this browser? This cannot be undone.')){localStorage.removeItem(STORE_KEY);location.reload();}return;}
   }
 
+  async function openSubjectPicker(slug){
+    const subject=getManifestSubject(slug);if(!subject)return;
+    try{
+      busy(true,`Loading ${subject.name}`, 'Checking the complete subject question bank…');
+      const rows=await loadSubject(subject);busy(false);
+      const pool=filteredQuestions(rows);
+      const modal=document.createElement('div');modal.className='loading-overlay';modal.id='subject-picker';
+      modal.innerHTML=`<div class="loading-card" style="width:min(440px,94vw);padding:22px">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><strong style="font:800 17px Manrope">${esc(subject.name)}</strong><button class="icon-btn" data-modal-close aria-label="Close">×</button></div>
+        <p style="margin:8px 0 4px">${fmtInt(pool.length)} answerable questions are available in this subject. A session is only a batch, not the whole bank.</p>
+        <label style="display:block;font-size:11px;font-weight:700;margin:14px 0 5px">Questions in this session</label>
+        <select id="subject-count" class="field-input" style="max-width:none;width:100%">
+          <option value="20">20 questions</option><option value="50">50 questions</option><option value="100" selected>100 questions</option><option value="250">250 questions</option><option value="500">500 questions</option>
+        </select>
+        <div class="notice" style="margin:14px 0">Questions are shuffled from the full subject bank. Choose another session later to continue practising more questions. Answers and explanations appear after you select an option and press Check answer.</div>
+        <button class="btn btn-primary btn-block" data-subject-start>Start subject practice →</button>
+      </div>`;
+      document.body.append(modal);
+      modal.addEventListener('click',ev=>{if(ev.target===modal||ev.target.closest('[data-modal-close]')){modal.remove();return;}if(ev.target.closest('[data-subject-start]')){const count=Number($('#subject-count',modal).value)||100;modal.remove();startSubject(slug,{count});}});
+    }catch(e){busy(false);toast(e.message);}
+  }
   async function openTopicPicker(slug){
     const subject=getManifestSubject(slug);if(!subject)return;
     try{busy(true,`Loading ${subject.name}`,`Finding available topics…`);const rows=await loadSubject(subject);busy(false);
       const counts=new Map();for(const q of filteredQuestions(rows)){const t=q.topic||'General';counts.set(t,(counts.get(t)||0)+1);}
       const topics=[...counts.entries()].sort((a,b)=>b[1]-a[1]);
       const modal=document.createElement('div');modal.className='loading-overlay';modal.id='topic-picker';
-      modal.innerHTML=`<div class="loading-card" style="width:min(540px,94vw);max-height:82vh;overflow:auto;padding:22px"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><div><strong style="font:800 17px Manrope">Choose a topic</strong><p style="margin:4px 0 0">${esc(subject.name)} · ${fmtInt(counts.size)} topics available</p></div><button class="icon-btn" data-modal-close aria-label="Close">×</button></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px">${topics.map(([name,n])=>`<button class="btn btn-light" data-topic-choice="${esc(name)}" style="justify-content:space-between;text-align:left;font-size:11px;min-height:44px"><span>${esc(name)}</span><span style="opacity:.7">${n}</span></button>`).join('')}</div></div>`;document.body.append(modal);
-      modal.addEventListener('click',ev=>{if(ev.target===modal||ev.target.closest('[data-modal-close]')){modal.remove();return;}const b=ev.target.closest('[data-topic-choice]');if(b){const topic=b.dataset.topicChoice;modal.remove();startSubject(slug,{topic,count:20});}});
+      modal.innerHTML=`<div class="loading-card" style="width:min(540px,94vw);max-height:82vh;overflow:auto;padding:22px"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><div><strong style="font:800 17px Manrope">Choose a topic</strong><p style="margin:4px 0 0">${esc(subject.name)} · ${fmtInt(counts.size)} topics available</p></div><button class="icon-btn" data-modal-close aria-label="Close">×</button></div><label style="display:block;font-size:11px;font-weight:700;margin:14px 0 5px">Questions in this topic session</label><select id="topic-count" class="field-input" style="max-width:none;width:100%"><option value="20">20 questions</option><option value="50">50 questions</option><option value="100" selected>100 questions</option><option value="250">250 questions</option><option value="500">500 questions</option></select><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px">${topics.map(([name,n])=>`<button class="btn btn-light" data-topic-choice="${esc(name)}" style="justify-content:space-between;text-align:left;font-size:11px;min-height:44px"><span>${esc(name)}</span><span style="opacity:.7">${n}</span></button>`).join('')}</div></div>`;document.body.append(modal);
+      modal.addEventListener('click',ev=>{if(ev.target===modal||ev.target.closest('[data-modal-close]')){modal.remove();return;}const b=ev.target.closest('[data-topic-choice]');if(b){const topic=b.dataset.topicChoice;const count=Number($('#topic-count',modal).value)||100;modal.remove();startSubject(slug,{topic,count});}});
     }catch(e){busy(false);toast(e.message);}
   }
   async function startRecentReview(){if(!await ensureAll())return;const ids=Object.entries(store.progress).sort((a,b)=>(b[1].lastSeen||'').localeCompare(a[1].lastSeen||'')).map(([id])=>id);const items=ids.slice(0,100).map(questionById).filter(q=>q&&isAllowed(q));makeSession(items,{title:'Recent question review'});}
