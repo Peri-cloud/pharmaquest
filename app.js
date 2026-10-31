@@ -121,9 +121,9 @@
   function stopTimer(){if(appState.timer){clearInterval(appState.timer);appState.timer=null;}}
   function clockString(seconds){const s=Math.max(0,Math.floor(seconds));return `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;}
   function startTimer(){stopTimer();if(!appState.session)return;appState.timer=setInterval(()=>{const s=appState.session;if(!s)return;const el=$('#session-clock');if(s.deadline){const rem=Math.max(0,Math.ceil((s.deadline-Date.now())/1000));if(el)el.textContent=clockString(rem);if(rem<=0){finishSession(true);}}else{const elapsed=Math.floor((Date.now()-s.startedAt)/1000);if(el)el.textContent=clockString(elapsed);}},1000);}
-  function submitPractice(){const s=appState.session;if(!s)return;const i=s.index,q=s.items[i],selected=s.picks[i];if(!Number.isInteger(selected)){toast('Choose an option before submitting.');return;}if(s.checked[i])return;s.checked[i]=true;recordAnswer(q,selected);renderPractice();}
-  function goNext(){const s=appState.session;if(!s)return;if(s.mode==='practice'&&!s.checked[s.index]&&Number.isInteger(s.picks[s.index])){toast('Submit your selected answer, or skip this question.');return;}if(s.index<s.items.length-1){s.index++;renderPractice();}else finishSession(false);}
-  function goPrevious(){const s=appState.session;if(s&&s.index>0){s.index--;renderPractice();}}
+  function submitPractice(){const s=appState.session;if(!s)return;const i=s.index,q=s.items[i],selected=s.picks[i];if(!Number.isInteger(selected)){toast('Choose an option before submitting.');return;}if(s.checked[i])return;s.checked[i]=true;recordAnswer(q,selected);render();}
+  function goNext(){const s=appState.session;if(!s)return;if(s.mode==='practice'&&!s.checked[s.index]&&Number.isInteger(s.picks[s.index])){toast('Submit your selected answer, or skip this question.');return;}if(s.index<s.items.length-1){s.index++;render();}else finishSession(false);}
+  function goPrevious(){const s=appState.session;if(s&&s.index>0){s.index--;render();}}
   function finishSession(timeUp=false){
     const s=appState.session;if(!s)return;stopTimer();
     if(s.mode==='exam'){
@@ -242,7 +242,7 @@
   }
   function render(){
     let content='';
-    switch(appState.page){case 'dashboard':content=renderDashboard();break;case 'subjects':content=renderSubjects();break;case 'practice':content=renderPractice();break;case 'review':content=renderReview();break;case 'analytics':content=renderAnalytics();break;case 'settings':content=renderSettings();break;case 'results':content=renderResults();break;default:content=renderDashboard();}
+    switch(appState.page){case 'dashboard':content=renderDashboard();break;case 'subjects':content=renderSubjects();break;case 'practice':content=render();break;case 'review':content=renderReview();break;case 'analytics':content=renderAnalytics();break;case 'settings':content=renderSettings();break;case 'results':content=renderResults();break;default:content=renderDashboard();}
     $('#app').innerHTML=shell(content);
   }
   function exportProgress(){
@@ -266,14 +266,14 @@
     if(a==='subject-topics'){openTopicPicker(el.dataset.slug);return;}
     if(a==='topic-start'){startSubject(el.dataset.slug,{topic:el.dataset.topic});return;}
     if(a==='mock'){openMockBuilder();return;}
-    if(a==='choose-option'){const s=appState.session;if(!s||s.mode==='practice'&&s.checked[s.index])return;s.picks[s.index]=Number(el.dataset.index);renderPractice();return;}
+    if(a==='choose-option'){const s=appState.session;if(!s||s.mode==='practice'&&s.checked[s.index])return;s.picks[s.index]=Number(el.dataset.index);render();return;}
     if(a==='submit'){submitPractice();return;}
-    if(a==='skip'){const s=appState.session;if(!s)return;if(s.index<s.items.length-1){s.index++;renderPractice();}else finishSession(false);return;}
+    if(a==='skip'){const s=appState.session;if(!s)return;if(s.index<s.items.length-1){s.index++;render();}else finishSession(false);return;}
     if(a==='next'){goNext();return;}
     if(a==='previous'){goPrevious();return;}
-    if(a==='jump'){const s=appState.session;if(s){s.index=Number(el.dataset.index);renderPractice();}return;}
-    if(a==='bookmark'){const s=appState.session;if(!s)return;toggleBookmark(s.items[s.index]);renderPractice();toast(store.bookmarks.includes(s.items[s.index].id)?'Question bookmarked.':'Bookmark removed.');return;}
-    if(a==='mark-review'){const s=appState.session;if(!s)return;s.reviewLater[s.index]=!s.reviewLater[s.index];renderPractice();return;}
+    if(a==='jump'){const s=appState.session;if(s){s.index=Number(el.dataset.index);render();}return;}
+    if(a==='bookmark'){const s=appState.session;if(!s)return;toggleBookmark(s.items[s.index]);render();toast(store.bookmarks.includes(s.items[s.index].id)?'Question bookmarked.':'Bookmark removed.');return;}
+    if(a==='mark-review'){const s=appState.session;if(!s)return;s.reviewLater[s.index]=!s.reviewLater[s.index];render();return;}
     if(a==='exit-session'){if(confirm('Exit this session? Your submitted practice answers are already saved.')){stopTimer();appState.session=null;setPage('dashboard');}return;}
     if(a==='review-tab'){appState.reviewTab=el.dataset.tab;render();return;}
     if(a==='review-start'){if(appState.reviewTab==='bookmarks')startBookmarks();else if(appState.reviewTab==='wrong')startWrong();else startRecentReview();return;}
@@ -330,8 +330,8 @@
   function onKey(e){
     if(!appState.session||['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName))return;
     const s=appState.session;
-    if(/^[1-6]$/.test(e.key)){const n=Number(e.key)-1;if(n<s.items[s.index].options.length){s.picks[s.index]=n;renderPractice();}}
-    else if(e.key.toLowerCase()==='b'&&s.mode==='practice'){toggleBookmark(s.items[s.index]);renderPractice();}
+    if(/^[1-6]$/.test(e.key)){const n=Number(e.key)-1;if(n<s.items[s.index].options.length){s.picks[s.index]=n;render();}}
+    else if(e.key.toLowerCase()==='b'&&s.mode==='practice'){toggleBookmark(s.items[s.index]);render();}
     else if(e.key==='Enter'){e.preventDefault();if(s.mode==='practice'&&!s.checked[s.index])submitPractice();else goNext();}
   }
   function bootError(err){console.error(err);$('#app').innerHTML=`<div class="empty-state"><div class="empty-icon">⚠</div><h3>Could not load PharmaQuest</h3><p>${esc(err.message||'Unknown error')}. Run this folder through a local web server or GitHub Pages, rather than opening index.html directly.</p><p style="font-family:monospace;font-size:10px">Windows: double-click START-LOCAL.bat</p></div>`;}
